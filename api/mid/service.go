@@ -26,7 +26,7 @@ func (lm *serviceDiMiddle) GetName() string {
 
 func (am *serviceDiMiddle) Handler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		CtxServDiKey := util.CtxKey("ServiceDi")
+		CtxServDiKey := util.CtxKey("ServiceDI")
 		val := reflect.ValueOf(am.di)
 		if val.Kind() == reflect.Ptr {
 			val = reflect.Indirect(val)
