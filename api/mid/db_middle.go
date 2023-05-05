@@ -8,7 +8,6 @@ import (
 	"github.com/google/uuid"
 
 	goSterna "github.com/wayne011872/goSterna"
-	"github.com/wayne011872/goSterna/api"
 	apiErr "github.com/wayne011872/goSterna/api/err"
 	"github.com/wayne011872/goSterna/db"
 	"github.com/wayne011872/goSterna/log"
@@ -36,7 +35,7 @@ func (lm *dbMiddle) GetName() string {
 }
 
 func(lm *dbMiddle) outputErr(c *gin.Context, err error) {
-	api.GinOutputErr(c,lm.service,err)
+	apiErr.GinOutputErr(c,lm.service,err)
 }
 
 func (am *dbMiddle)Handler() gin.HandlerFunc {

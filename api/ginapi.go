@@ -3,7 +3,9 @@ package api
 import (
 	"fmt"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
+	"github.com/wayne011872/goSterna/api/mid"
 )
 
 type GinAPI interface {
@@ -26,11 +28,20 @@ type GinApiHandler struct {
 
 type GinApiServer interface {
 	AddAPIs(handlers ...GinAPI)GinApiServer
+	Middles(mids ...mid.GinMiddle) GinApiServer
 	Run(port string) error
 }
 
 type apiService struct {
 	*gin.Engine
+}
+
+func (serv *apiService) Middles(mids ...mid.GinMiddle) GinApiServer {
+	for _, m := range mids {
+		serv.Engine.Use(m.Handler())
+	}
+
+	return serv
 }
 
 func (serv *apiService) AddAPIs(apis ...GinAPI) GinApiServer {
