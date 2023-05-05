@@ -1,0 +1,20 @@
+mongo:
+    uri: mongodb://localhost:27017
+    defaul: v5-dev
+
+mysql:
+    username: root
+    password: A880915a
+    network: tcp
+    server: 127.0.0.1
+    port: 3306
+    database: tps
+
+redis:
+    host: 127.0.0.1:6379
+    pass: ""
+    db: 0
+
+log:
+    level: debug
+    target: os
