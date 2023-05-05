@@ -1,4 +1,4 @@
-module github.com/wayne011872/golangGeneral
+module github.com/wayne011872/goSterna
 
 go 1.18
 

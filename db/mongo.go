@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/wayne011872/golangGeneral/util"
+	"github.com/wayne011872/goSterna/util"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"

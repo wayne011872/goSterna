@@ -2,7 +2,7 @@ package golanggeneral
 
 import (
 	"os"
-	"github.com/wayne011872/golangGeneral/util"
+	"github.com/wayne011872/goSterna/util"
 	"github.com/spf13/viper"
 )
 

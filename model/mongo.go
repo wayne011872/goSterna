@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/wayne011872/golangGeneral/dao"
-	"github.com/wayne011872/golangGeneral/log"
+	"github.com/wayne011872/goSterna/dao"
+	"github.com/wayne011872/goSterna/log"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

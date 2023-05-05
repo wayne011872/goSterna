@@ -4,8 +4,8 @@ import (
 	"reflect"
 
 	"github.com/gin-gonic/gin"
-	golanggeneral "github.com/wayne011872/golangGeneral"
-	"github.com/wayne011872/golangGeneral/util"
+	golanggeneral "github.com/wayne011872/goSterna"
+	"github.com/wayne011872/goSterna/util"
 )
 
 func NewServiceDiMid(di interface{},service string) GinMiddle {

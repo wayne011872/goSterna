@@ -7,11 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
-	golanggeneral "github.com/wayne011872/golangGeneral"
-	"github.com/wayne011872/golangGeneral/api"
-	apiErr "github.com/wayne011872/golangGeneral/api/err"
-	"github.com/wayne011872/golangGeneral/db"
-	"github.com/wayne011872/golangGeneral/log"
+	goSterna "github.com/wayne011872/goSterna"
+	"github.com/wayne011872/goSterna/api"
+	apiErr "github.com/wayne011872/goSterna/api/err"
+	"github.com/wayne011872/goSterna/db"
+	"github.com/wayne011872/goSterna/log"
 )
 
 type DBMidDI interface {
@@ -41,7 +41,7 @@ func(lm *dbMiddle) outputErr(c *gin.Context, err error) {
 
 func (am *dbMiddle)Handler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		servDi, ok := c.Get(string(golanggeneral.CtxServDiKey))
+		servDi, ok := c.Get(string(goSterna.CtxServDiKey))
 		if !ok || servDi == nil {
 			am.outputErr(c,apiErr.New(http.StatusInternalServerError, "can not get di"))
 			c.Abort()
