@@ -4,8 +4,7 @@ import (
 	"reflect"
 
 	"github.com/gin-gonic/gin"
-	golanggeneral "github.com/wayne011872/goSterna"
-	"github.com/wayne011872/goSterna/util"
+	goSterna "github.com/wayne011872/goSterna"
 )
 
 func NewServiceDiMid(di interface{},service string) GinMiddle {
@@ -26,14 +25,13 @@ func (lm *serviceDiMiddle) GetName() string {
 
 func (am *serviceDiMiddle) Handler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		CtxServDiKey := util.CtxKey("ServiceDI")
 		val := reflect.ValueOf(am.di)
 		if val.Kind() == reflect.Ptr {
 			val = reflect.Indirect(val)
 		}
 		newValue := reflect.New(val.Type()).Interface()
-		golanggeneral.InitConfByEnv(newValue)
-		c.Request = util.SetCtxKeyVal(c.Request, CtxServDiKey,newValue)
+		goSterna.InitDefaultConf(".",newValue)
+		c.Set(string(goSterna.CtxServDiKey),newValue)
 
 		c.Next()
 	}

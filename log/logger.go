@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/wayne011872/goSterna/util"
+	"github.com/gin-gonic/gin"
 )
 
 const(
@@ -37,6 +38,13 @@ var (
 		"fatal":fatalLevel,
 	}
 )
+func GetLogByGin(c *gin.Context) Logger {
+	cltInter ,_:= c.Get(string(CtxLogKey))
+	if dbclt, ok := cltInter.(Logger); ok {
+		return dbclt
+	}
+	return nil
+}
 
 func GetLogByReq(req *http.Request) Logger {
 	return GetLogByCtx(req.Context())

@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/wayne011872/goSterna/util"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -19,6 +21,13 @@ const (
 	CtxMongoKey = util.CtxKey("ctxMongoKey")
 	HeaderDBKey = "raccMongoDB"
 )
+func GetMgoDBClientByGin(c *gin.Context) MongoDBClient {
+	cltInter ,_:= c.Get(string(CtxMongoKey))
+	if dbclt, ok := cltInter.(MongoDBClient); ok {
+		return dbclt
+	}
+	return nil
+}
 
 func GetMgoDBClientByReq(req *http.Request) MongoDBClient {
 	return GetMgoDBClientByCtx(req.Context())
@@ -45,6 +54,8 @@ type MongoConf struct {
 	DefaultDB string `yaml:"defaul"`
 
 	authUri  string
+	lock     *sync.Mutex
+	connPool map[string]*mongo.Client
 }
 
 func (mc *MongoConf) SetAuth(user, pwd string) {

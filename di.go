@@ -1,37 +1,65 @@
-package golanggeneral
+package goSterna
 
 import (
-	"os"
+
+	"context"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+
 	"github.com/wayne011872/goSterna/util"
-	"github.com/spf13/viper"
+
+	yaml "gopkg.in/yaml.v2"
 )
 
 const (
-	CtxServDiKey = util.CtxKey("ServiceDI")
+	CtxServDiKey util.CtxKey = "ServiceDI"
 )
 
-func InitConfByEnv(di interface{}) {
-	configPath := os.Getenv(("CONFIG_PATH"))
-	configName := os.Getenv(("CONFIG_NAME"))
-	configType := os.Getenv(("CONFIG_TYPE"))
-	if configPath == "" {
-		panic("沒有設定CONFIG_PATH參數")
-	}
-	if configName == "" {
-		panic("沒有設定CONFIG_NAME參數")
-	}
-	if configType == "" {
-		panic("沒有設定CONFIG_TYPE參數")
-	}
-	vip := viper.New()
-	vip.AddConfigPath(configPath)
-	vip.SetConfigName(configName)
-	vip.SetConfigType(configType)
-	if err := vip.ReadInConfig(); err != nil {
+func InitConfByFile(f string, di interface{}) {
+	yamlFile, err := ioutil.ReadFile(f)
+	if err != nil {
+		fmt.Println("load conf fail: " + f)
 		panic(err)
 	}
-	err := vip.UnmarshalKey("mongo", &di)
+	InitConfByByte(yamlFile, di)
+}
+
+func InitConfByByte(b []byte, di interface{}) {
+	err := yaml.Unmarshal(b, di)
 	if err != nil {
 		panic(err)
 	}
+	util.InitValidator()
+}
+
+// 初始化設定檔，讀YAML檔
+func IniConfByEnv(path, env string, di interface{}) {
+	const confFileTpl = "%s/%s/config.yml"
+	InitConfByFile(fmt.Sprintf(confFileTpl, path, env), di)
+}
+
+func InitDefaultConf(path string, di interface{}) {
+	InitConfByFile(util.StrAppend(path, "/conf/config.yml"), di)
+}
+
+func InitConfByUri(uri string, di interface{}) error {
+	resp, err := http.Get(uri)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	err = yaml.Unmarshal(body, di)
+	if err != nil {
+		return err
+	}
+	util.InitValidator()
+	return nil
+}
+
+func GetDiByCtx(ctx context.Context) interface{} {
+	diInter := ctx.Value(CtxServDiKey)
+	return diInter
 }

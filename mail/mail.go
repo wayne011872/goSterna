@@ -2,12 +2,9 @@ package mail
 
 import (
 	"crypto/tls"
-	"fmt"
 	"net/smtp"
-	"os"
 	"strconv"
 	"errors"
-	"github.com/joho/godotenv"
 	"github.com/jordan-wright/email"
 	"github.com/spf13/viper"
 )
@@ -30,27 +27,12 @@ func (m *Mail) MailInit() {
 }
 
 func (m *Mail) GetConfig(){
-	err := godotenv.Load(".env")
-	if err != nil {
-		fmt.Println("No .env file")
-	}
-	configPath := os.Getenv(("CONFIG_PATH"))
-	configName := os.Getenv(("CONFIG_NAME"))
-	configType := os.Getenv(("CONFIG_TYPE"))
-	if configPath ==""{
-		panic("沒有設定CONFIG_PATH參數")
-	}
-	if configName ==""{
-		panic("沒有設定CONFIG_NAME參數")
-	}
-	if configType ==""{
-		panic("沒有設定CONFIG_TYPE參數")
-	}
+	
 	vip:=viper.New()
-	vip.AddConfigPath(configPath)
-	vip.SetConfigName(configName)
-	vip.SetConfigType(configType)
-	err = vip.ReadInConfig()
+	vip.AddConfigPath("./conf")
+	vip.SetConfigName("config.yml")
+	vip.SetConfigType("yaml")
+	err := vip.ReadInConfig()
 	if err != nil {
 		panic("讀取設定檔出現錯誤，原因為：" + err.Error())
 	}
