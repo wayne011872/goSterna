@@ -42,7 +42,7 @@ func (am *dbMiddle)Handler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		servDi, ok := c.Get(string(goSterna.CtxServDiKey))
 		if !ok || servDi == nil {
-			am.outputErr(c,apiErr.New(http.StatusInternalServerError, "can not get di"))
+			am.outputErr(c,apiErr.NewApiError(http.StatusInternalServerError, "can not get di"))
 			c.Abort()
 			return
 		}
@@ -53,7 +53,7 @@ func (am *dbMiddle)Handler() gin.HandlerFunc {
 
 			dbclt, err := dbdi.NewMongoDBClient(c.Request.Context(), "")
 			if err != nil {
-				am.outputErr(c, apiErr.New(http.StatusInternalServerError, err.Error()))
+				am.outputErr(c, apiErr.NewApiError(http.StatusInternalServerError, err.Error()))
 				c.Abort()
 				return
 			}
@@ -65,7 +65,7 @@ func (am *dbMiddle)Handler() gin.HandlerFunc {
 			c.Next()
 			runtime.GC()
 		}else {
-			am.outputErr(c, apiErr.New(http.StatusInternalServerError, "invalid di"))
+			am.outputErr(c, apiErr.NewApiError(http.StatusInternalServerError, "invalid di"))
 			c.Abort()
 			return
 		}

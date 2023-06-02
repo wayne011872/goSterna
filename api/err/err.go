@@ -35,11 +35,11 @@ func (e myApiError) Error() string {
 	return fmt.Sprintf("%v: %v", e.statusCode, e.message)
 }
 
-func New(status int, msg string) ApiError {
+func NewApiError(status int, msg string) ApiError {
 	return myApiError{statusCode: status, message: msg}
 }
 
-func NewWithKey(status int, msg string, key string) ApiError {
+func NewApiErrorWithKey(status int, msg string, key string) ApiError {
 	return myApiError{statusCode: status, message: msg, key: key}
 }
 

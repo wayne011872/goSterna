@@ -1,12 +1,11 @@
 module github.com/wayne011872/goSterna
 
-go 1.18
+go 1.20
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2
 	github.com/gin-gonic/gin v1.8.2
 	github.com/google/uuid v1.3.0
-	github.com/joho/godotenv v1.3.0
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/spf13/viper v1.14.0
 	go.mongodb.org/mongo-driver v1.11.1

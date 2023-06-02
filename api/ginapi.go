@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -112,30 +111,4 @@ type ApiError interface {
 	GetErrorKey() string
 	GetErrorMsg() string
 	error
-}
-
-type myApiError struct {
-	statusCode int
-	message    string
-	key        string
-}
-
-func (e myApiError) GetStatus() int {
-	return e.statusCode
-}
-
-func (e myApiError) GetErrorKey() string {
-	return e.key
-}
-
-func (e myApiError) GetErrorMsg() string {
-	return e.message
-}
-
-func (e myApiError) Error() string {
-	return fmt.Sprintf("%v: %v", e.statusCode, e.message)
-}
-
-func NewApiError(status int, msg string) ApiError {
-	return myApiError{statusCode: status, message: msg}
 }
