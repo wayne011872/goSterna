@@ -5,7 +5,7 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"os"
 	"net/http"
 
 	"github.com/wayne011872/goSterna/util"
@@ -18,7 +18,7 @@ const (
 )
 
 func InitConfByFile(f string, di interface{}) {
-	yamlFile, err := ioutil.ReadFile(f)
+	yamlFile, err := os.ReadFile(f)
 	if err != nil {
 		fmt.Println("load conf fail: " + f)
 		panic(err)
