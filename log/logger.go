@@ -14,7 +14,7 @@ import (
 
 const(
 	CtxLogKey = util.CtxKey("ctxLogKey")
-	LogTarget = "os"
+	LogTargetOS = "os"
 
 	infoPrefix = "INFO (%s)"
 	debugPrefix = "DEBUG (%s)"
@@ -40,8 +40,8 @@ var (
 )
 func GetLogByGin(c *gin.Context) Logger {
 	cltInter ,_:= c.Get(string(CtxLogKey))
-	if dbclt, ok := cltInter.(Logger); ok {
-		return dbclt
+	if l, ok := cltInter.(Logger); ok {
+		return l
 	}
 	return nil
 }
@@ -72,17 +72,22 @@ type LoggerDI interface{
 }
 
 type LoggerConf struct{
-	Level string `yaml:"level"`
-	Target string `yaml:"target"`	
+	Level string `yaml:"-"`
+	Target string `yaml:"-"`	
 }
 
 func (lc *LoggerConf) NewLogger(key string) Logger{
-	if lc == nil{
-		panic("log not set")
+		lc.Level = os.Getenv("LOG_LEVEL")
+	if lc.Level == "" {
+		lc.Level = "info"
 	}
-	level,ok:=levelMap[lc.Level]
-	if !ok{
-		level=0
+	lc.Target = os.Getenv("LOG_TARGET")
+	if lc.Target == "" {
+		lc.Target = LogTargetOS
+	}
+	level, ok := levelMap[lc.Level]
+	if !ok {
+		level = 0
 	}
 	myLevel := level
 
