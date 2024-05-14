@@ -18,3 +18,13 @@ func required(str string) bool {
 	}
 	return false
 }
+
+func IsStrInList(input string, target ...string) bool {
+	for _, paramName := range target {
+		if input == paramName {
+			return true
+		}
+	}
+	return false
+
+}
