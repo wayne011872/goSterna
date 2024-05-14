@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/wayne011872/goSterna/api/mid"
+	"github.com/wayne011872/goSterna/auth"
 )
 
 type GinAPI interface {
@@ -23,18 +24,32 @@ type GinApiHandler struct {
 	Method   string
 	Path     string
 	Handler  func(c *gin.Context)
+	Auth    bool
+	Group   []auth.UserPerm
 }
 
 type GinApiServer interface {
 	AddAPIs(handlers ...GinAPI)GinApiServer
 	Middles(mids ...mid.GinMiddle) GinApiServer
+	SetAuth(authmid mid.AuthGinMidInter) GinApiServer
+	Static(relativePath string, root string)GinApiServer
 	Run(port string) error
 }
 
 type apiService struct {
 	*gin.Engine
+	authMid mid.AuthGinMidInter
 }
 
+func (serv *apiService) Static(relativePath, root string) GinApiServer {
+	serv.Engine.Static(relativePath, root)
+	return serv
+}
+
+func (serv *apiService) SetAuth(authMid mid.AuthGinMidInter) GinApiServer {
+	serv.authMid = authMid
+	return serv
+}
 func (serv *apiService) Middles(mids ...mid.GinMiddle) GinApiServer {
 	for _, m := range mids {
 		serv.Engine.Use(m.Handler())
@@ -46,6 +61,9 @@ func (serv *apiService) Middles(mids ...mid.GinMiddle) GinApiServer {
 func (serv *apiService) AddAPIs(apis ...GinAPI) GinApiServer {
 	for _,api := range apis {
 		for _,h := range api.GetAPIs() {
+			if serv.authMid != nil {
+				serv.authMid.AddAuthPath(h.Path, h.Method, h.Auth, h.Group)
+			}
 			switch h.Method {
 			case "GET":
 				serv.Engine.GET(h.Path,h.Handler)

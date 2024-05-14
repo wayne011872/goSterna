@@ -3,7 +3,6 @@ package storage
 import (
 	"errors"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -30,7 +29,7 @@ func (hd *hd) Save(fp string, file []byte) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return absFilePath, ioutil.WriteFile(absFilePath, file, 0644)
+	return absFilePath, os.WriteFile(absFilePath, file, 0644)
 }
 
 func (hd *hd) SaveByReader(fp string, reader io.Reader) (string, error) {
@@ -65,7 +64,7 @@ func (hd *hd) Delete(filePath string) error {
 
 func (hd *hd) Get(fp string) ([]byte, error) {
 	absFilePath := hd.getAbsFilePath(fp)
-	return ioutil.ReadFile(absFilePath)
+	return os.ReadFile(absFilePath)
 }
 
 func (hd *hd) mkdir(absPath string) error {
@@ -89,7 +88,7 @@ func (hd *hd) FileExist(fp string) bool {
 
 func (hd *hd) List(dir string) []string {
 	absDir := hd.getAbsFilePath(dir)
-	files, err := ioutil.ReadDir(absDir)
+	files, err := os.ReadDir(absDir)
 	if err != nil {
 		return nil
 	}
