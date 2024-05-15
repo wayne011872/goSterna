@@ -6,7 +6,7 @@ import (
 
 	"github.com/wayne011872/goSterna"
 	apiErr "github.com/wayne011872/goSterna/api/err"
-	"github.com/wayne011872/goSterna/storage/myStorage"
+	myStorage "github.com/wayne011872/goSterna/storage"
 	"github.com/gin-gonic/gin"
 )
 

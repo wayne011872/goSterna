@@ -6,11 +6,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/wayne011872/goSterna/storage/myStorage"
 	"github.com/wayne011872/goSterna/util"
 )
 
-func NewHdStorage(path string) myStorage.Storage {
+func NewHdStorage(path string) Storage {
 	return &hd{Path: path}
 }
 

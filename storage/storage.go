@@ -1,4 +1,4 @@
-package myStorage
+package storage
 
 import "io"
 
