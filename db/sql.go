@@ -65,10 +65,10 @@ func (sc *SqlConf) GetUri() string {
 
 func (sc *SqlConf) NewSqlDB(ctx context.Context) (SqlClient, error) {
 	if sc.Uri == "" {
-		panic("mongo uri not set")
+		panic("sql uri not set")
 	}
 	if sc.DefaultDB == "" {
-		panic("mongo default db not set")
+		panic("sql default db not set")
 	}
 	sc.SetAuth(sc.User, sc.Pass)
 	fmt.Println(sc.GetUri())
