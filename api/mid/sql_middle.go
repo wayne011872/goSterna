@@ -13,32 +13,32 @@ import (
 	"github.com/wayne011872/goSterna/log"
 )
 
-type DBMidDI interface {
+type SqlDBMidDI interface {
 	log.LoggerDI
-	db.MongoDI
+	db.SqlDI
 }
 
-type DBMiddle string
+type SqlDBMiddle string
 
-func NewGinDBMid(service string) GinMiddle {
-	return &dbMiddle{
+func NewGinSqlDBMid(service string) GinMiddle {
+	return &sqlDbMiddle{
 		service: service,
 	}
 }
 
-type dbMiddle struct {
+type sqlDbMiddle struct {
 	service string
 }
 
-func (lm *dbMiddle) GetName() string {
+func (lm *sqlDbMiddle) GetName() string {
 	return "db"
 }
 
-func(lm *dbMiddle) outputErr(c *gin.Context, err error) {
+func(lm *sqlDbMiddle) outputErr(c *gin.Context, err error) {
 	apiErr.GinOutputErr(c,lm.service,err)
 }
 
-func (am *dbMiddle)Handler() gin.HandlerFunc {
+func (am *sqlDbMiddle)Handler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		servDi, ok := c.Get(string(goSterna.CtxServDiKey))
 		if !ok || servDi == nil {
@@ -47,11 +47,11 @@ func (am *dbMiddle)Handler() gin.HandlerFunc {
 			return
 		}
 
-		if dbdi, ok := servDi.(DBMidDI); ok {
+		if dbdi, ok := servDi.(SqlDBMidDI); ok {
 			uuid := uuid.New().String()
 			l := dbdi.NewLogger(uuid)
 
-			dbclt, err := dbdi.NewMongoDBClient(c.Request.Context(), "")
+			dbclt, err := dbdi.NewSqlDB(c.Request.Context())
 			if err != nil {
 				am.outputErr(c, apiErr.NewApiError(http.StatusInternalServerError, err.Error()))
 				c.Abort()
@@ -59,7 +59,7 @@ func (am *dbMiddle)Handler() gin.HandlerFunc {
 			}
 			defer dbclt.Close()
 
-			c.Set(string(db.CtxMongoKey), dbclt)
+			c.Set(string(db.CtxSqlKey), dbclt)
 			c.Set(string(log.CtxLogKey), l)
 
 			c.Next()
