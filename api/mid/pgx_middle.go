@@ -21,14 +21,16 @@ type PgxMidDI interface {
 
 type PgxMiddle string
 
-func NewGinPgxMid(service string) GinMiddle {
+func NewGinPgxMid(service string,pgxClient db.PgxPoolClient) GinMiddle {
 	return &pgxMiddle{
 		service: service,
+		pgxClient: pgxClient,
 	}
 }
 
 type pgxMiddle struct {
 	service string
+	pgxClient db.PgxPoolClient
 }
 
 func (pm *pgxMiddle) GetName() string {
